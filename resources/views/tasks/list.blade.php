@@ -14,9 +14,9 @@
 
         <li> 
 
-            <a href="{{ route('checkTask', ['id'=>$item->id]) }}">@if ($item->solved===1) | Desmarcar |@else| Marcar |@endif</a> {{ $item->title }}
-            <a href="{{ route('editTask', ['id'=>$item->id]) }}"> | Editar tarefa | </a>
-            <a href="{{ route('destroyTask', ['id'=>$item->id]) }}"> | Excluir tarefa | </a>
+            <a href="{{ route('checkTask', ['id'=>$item->id]) }}">@if ($item->solved===1) [ Desmarcar ]@else[ Marcar ]@endif</a> {{ $item->title }}
+            <a href="{{ route('editTask', ['id'=>$item->id]) }}"> [ Editar tarefa ] </a>
+            <a href="{{ route('destroyTask', ['id'=>$item->id]) }}" onclick="return confirm('Tem certeza que deseja excluir?')"> [ Excluir tarefa ] </a>
         </li>
         @endforeach
         </ul>

@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Models\Task;
 
 class TasksController extends Controller
 {
     public function index(){
 
-        $list = DB::select('SELECT * FROM tasks');
+        $list = task::all();
 
         return view('tasks.list', [
             'list' => $list
@@ -22,33 +23,57 @@ class TasksController extends Controller
     }
 
     public function store(Request $request){
-        if($request->filled('title')){
-            $title = $request->input('title');
+        $request->validate([
+            'title' => ['required', 'string']
+        ]);
 
-            DB::insert('INSERT INTO tasks (title) VALUES (:title)', [
-               'title'  => $title
-            ]);
+        $title = $request->input('title');
 
-            return redirect()->route('listTask');
-        } else {
-            return redirect()->route('createTask')
-            ->with('warning', 'Você não preencheu o título');
-        }
+        $task = new Task;
+        $task->title = $title;
+        $task->save();
+
+        return redirect()->route('listTask');
     }
 
-    public function edit(){
+    public function edit($id){
+        $data = Task::find($id);
+
+        if($data) {
+            return view('tasks.edit', [
+                'data' => $data
+            ]);
+        } else {
+            return redirect()->route('listTask');
+        }
+
         return view('tasks.edit');
     }
 
-    public function update(){
-        
+    public function update(Request $request, $id){
+            $request->validate([
+                'title' => ['required', 'string']
+            ]);
+
+            $title = $request->input('title');
+
+            Task::find($id)->update(['title'=>$title]);
+
+            return redirect()->route('listTask');
+        }
+
+    public function destroy($id){
+        Task::find($id)->delete();
+
+        return redirect()->route('listTask');
     }
 
-    public function destroy(){
-        
-    }
+    public function check($id){
 
-    public function check(){
-        
+        $task = Task::find($id);
+        $task->solved = 1 - $task->solved;
+        $task->save();
+
+        return redirect()->route('listTask');
     }
 }

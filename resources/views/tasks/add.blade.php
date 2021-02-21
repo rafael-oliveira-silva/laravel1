@@ -7,9 +7,9 @@
     <h1>Adição</h1>
 
     @if(@session('warning'))
-        @alert('warning')
-            {{ @session('warning') }}
-        @endalert
+        @component('components.alert')
+            @session('warning')
+        @endcomponent
     @endif
 
     <form method="post">

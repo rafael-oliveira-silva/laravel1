@@ -1,4 +1,4 @@
 <div class="alert alert-danger">
-    <div class="alert-title">Aviso</div><br>
+    <div class="alert-title"><strong>Aviso: </strong></div><br />
     {{$slot}}
-    </div>
+</div>
